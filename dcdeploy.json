@@ -16,12 +16,14 @@
         },
         "domainName": {
             "type": "string",
+            "defaultValue": "avddemo.swo",
             "metadata": {
                 "description": "The FQDN of the Active Directory Domain to be created"
             }
         },
         "dnsPrefix": {
             "type": "string",
+            "defaultValue": "avddemo",
             "metadata": {
                 "description": "The DNS prefix for the public IP address used by the Load Balancer"
             }
@@ -208,6 +210,12 @@
                     },
                     "infrasubnetRange": {
                         "value": "[parameters('infrasubnetRange')]"
+                    },
+                    "avdsubnetName": {
+                        "value": "[parameters('avdsubnetName')]"
+                    },
+                    "avdsubnetRange": {
+                        "value": "[parameters('avdsubnetRange')]"
                     },
                     "location": {
                         "value": "[parameters('location')]"
@@ -408,10 +416,10 @@
                         "value": "[parameters('infrasubnetRange')]"
                     },
                     "avdsubnetName": {
-                        "value": "[parameters('infrasubnetName')]"
+                        "value": "[parameters('avdsubnetName')]"
                     },
                     "avdsubnetRange": {
-                        "value": "[parameters('infrasubnetRange')]"
+                        "value": "[parameters('avdsubnetRange')]"
                     },
                     "DNSServerAddress": {
                         "value": [
