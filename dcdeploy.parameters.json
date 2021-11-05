@@ -3,16 +3,16 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "adminUsername": {
-        "value": "GEN-UNIQUE"
+        "value": "avd.admin"
       },
       "adminPassword": {
-        "value": "GEN-PASSWORD"
+        "value": ""
       },
       "domainName": {
-        "value": "corp.mydomain.com"
+        "value": "avddemo.swo"
       },
       "dnsPrefix": {
-        "value": "GEN-UNIQUE"
+        "value": "avddemo"
       }
     }
   }

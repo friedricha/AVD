@@ -91,7 +91,7 @@
         },
         "inboundNatRulesName": {
             "type": "string",
-            "defaultValue": "adRDP",
+            "defaultValue": "avdDCRDP",
             "metadata": {
                 "description": "Inbound NAT rules name."
             }
@@ -110,18 +110,32 @@
                 "description": "Private IP address."
             }
         },
-        "subnetName": {
+        "infrasubnetName": {
             "type": "string",
-            "defaultValue": "avdDCSubnet",
+            "defaultValue": "avd-infra-subnet",
             "metadata": {
-                "description": "Subnet name."
+                "description": "Infrastructure Subnet name."
             }
         },
-        "subnetRange": {
+        "infrasubnetRange": {
             "type": "string",
             "defaultValue": "10.0.0.0/24",
             "metadata": {
-                "description": "Subnet IP range."
+                "description": "Infrastructure Subnet IP range."
+            }
+        },
+        "avdsubnetName": {
+            "type": "string",
+            "defaultValue": "avd-poc-subnet",
+            "metadata": {
+                "description": "AVD Subnet name."
+            }
+        },
+        "avdsubnetRange": {
+            "type": "string",
+            "defaultValue": "10.0.1.0/24",
+            "metadata": {
+                "description": "AVD Subnet IP range."
             }
         },
         "publicIPAddressName": {
@@ -189,11 +203,11 @@
                     "virtualNetworkAddressRange": {
                         "value": "[parameters('virtualNetworkAddressRange')]"
                     },
-                    "subnetName": {
-                        "value": "[parameters('subnetName')]"
+                    "infrasubnetName": {
+                        "value": "[parameters('infrasubnetName')]"
                     },
-                    "subnetRange": {
-                        "value": "[parameters('subnetRange')]"
+                    "infrasubnetRange": {
+                        "value": "[parameters('infrasubnetRange')]"
                     },
                     "location": {
                         "value": "[parameters('location')]"
@@ -257,8 +271,8 @@
                         "properties": {
                             "privateIPAllocationMethod": "Static",
                             "privateIPAddress": "[parameters('privateIPAddress')]",
-                            "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]"
+                            "infrasubnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('infrasubnetName'))]"
                             },
                             "loadBalancerBackendAddressPools": [
                                 {
@@ -387,11 +401,17 @@
                     "virtualNetworkAddressRange": {
                         "value": "[parameters('virtualNetworkAddressRange')]"
                     },
-                    "subnetName": {
-                        "value": "[parameters('subnetName')]"
+                    "infrasubnetName": {
+                        "value": "[parameters('infrasubnetName')]"
                     },
-                    "subnetRange": {
-                        "value": "[parameters('subnetRange')]"
+                    "infrasubnetRange": {
+                        "value": "[parameters('infrasubnetRange')]"
+                    },
+                    "avdsubnetName": {
+                        "value": "[parameters('infrasubnetName')]"
+                    },
+                    "avdsubnetRange": {
+                        "value": "[parameters('infrasubnetRange')]"
                     },
                     "DNSServerAddress": {
                         "value": [
