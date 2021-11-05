@@ -28,7 +28,7 @@
         },
         "vmSize": {
             "type": "string",
-            "defaultValue": "Standard_D2s_v3",
+            "defaultValue": "Standard_B2s",
             "metadata": {
                 "description": "Size of the VM for the controller"
             }
@@ -56,14 +56,14 @@
         },
         "virtualMachineName": {
             "type": "string",
-            "defaultValue": "adVM",
+            "defaultValue": "avdDC",
             "metadata": {
                 "description": "Virtual machine name."
             }
         },
         "virtualNetworkName": {
             "type": "string",
-            "defaultValue": "adVNET",
+            "defaultValue": "avdVNET",
             "metadata": {
                 "description": "Virtual network name."
             }
@@ -98,7 +98,7 @@
         },
         "networkInterfaceName": {
             "type": "string",
-            "defaultValue": "adNic",
+            "defaultValue": "avdDCNic",
             "metadata": {
                 "description": "Network interface name."
             }
@@ -112,7 +112,7 @@
         },
         "subnetName": {
             "type": "string",
-            "defaultValue": "adSubnet",
+            "defaultValue": "avdDCSubnet",
             "metadata": {
                 "description": "Subnet name."
             }
@@ -126,21 +126,21 @@
         },
         "publicIPAddressName": {
             "type": "string",
-            "defaultValue": "adPublicIP",
+            "defaultValue": "avdDCLBPublicIP",
             "metadata": {
-                "description": "Subnet IP range."
+                "description": "Loadbalancer Public IP."
             }
         },
         "availabilitySetName": {
             "type": "string",
-            "defaultValue": "adAvailabiltySet",
+            "defaultValue": "avdDCAvailabiltySet",
             "metadata": {
                 "description": "Availability set name."
             }
         },
         "loadBalancerName": {
             "type": "string",
-            "defaultValue": "adLoadBalancer",
+            "defaultValue": "avdDCLoadBalancer",
             "metadata": {
                 "description": "Load balancer name."
             }

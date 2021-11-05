@@ -1,0 +1,69 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.1",
+    "parameters": {
+        "rg1_Name": {
+            "type": "string"
+        },
+        "rg_Location": {
+            "type": "string"
+        },
+        "rg_tags": {
+            "type": "object",
+            "defaultValue": {}
+        },
+        "rg2_Name": {
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2018-05-01",
+            "location": "[parameters('rg_Location')]",
+            "name": "[parameters('rg1_Name')]",
+            "properties": {},
+            "tags": "[parameters('rg_tags')]"
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2018-05-01",
+            "location": "[parameters('rg_Location')]",
+            "name": "[parameters('rg2_Name')]",
+            "properties": {},
+            "tags": "[parameters('rg_tags')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "[concat('InitialDeployment-Locks',parameters('rg1_Name'))]",
+            "resourceGroup": "[parameters('rg1_Name')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups/', parameters('rg1_Name'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.Authorization/locks",
+                            "apiVersion": "2016-09-01",
+                            "name": "DoNotDelete",
+                            "properties": {
+                                "level": "CanNotDelete",
+                                "notes": "Resource group and its resources are locked and should not be deleted."
+                            }
+                        }
+                    ],
+                    "outputs": {}
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}
