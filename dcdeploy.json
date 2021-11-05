@@ -279,7 +279,7 @@
                         "properties": {
                             "privateIPAllocationMethod": "Static",
                             "privateIPAddress": "[parameters('privateIPAddress')]",
-                            "infrasubnet": {
+                            "subnet": {
                                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('infrasubnetName'))]"
                             },
                             "loadBalancerBackendAddressPools": [
