@@ -125,10 +125,8 @@ configuration CreateADPDC
         }
         xADUser DemoPoCUser 
         { 
-            DomainName                      = $DomainName 
-            DomainAdministratorCredential   = $DomainCreds 
+            DomainName                      = $DomainName
             UserName                        = $UserCreds.Username
-            UserPrincipalName               = $UserCreds.Username + "@" + $Domainname
             Description                     = "Demo PoC User account"
             Path                            = "OU=DemoPoC-Users,$domainDN"
             Password                        = $UserCreds
@@ -147,7 +145,7 @@ configuration CreateADPDC
             Description                     = "Demousers for AVD PoC"
             Ensure                          = "Present"
             Members                         = $UserCreds.Username
-            DependsOn                       = @("[xADUser]DemoPoCUser", "[xADOrganizationalUnit]DemoPoCUsersOU")
+            DependsOn                       = @("[xADOrganizationalUnit]DemoPoCUsersOU", "[xADUser]DemoPoCUser")
         }  
 
    }
