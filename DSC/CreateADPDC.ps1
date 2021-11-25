@@ -8,15 +8,19 @@ configuration CreateADPDC
         [Parameter(Mandatory)]
         [System.Management.Automation.PSCredential]$Admincreds,
 
+        [Parameter(Mandatory)]
+        [System.Management.Automation.PSCredential]$Usercreds,
+
         [Int]$RetryCount=20,
         [Int]$RetryIntervalSec=30
     ) 
     
     Import-DscResource -ModuleName xActiveDirectory, xStorage, xNetworking, PSDesiredStateConfiguration, xPendingReboot
     [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
+    [System.Management.Automation.PSCredential ]$UserCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Usercreds.UserName)", $Usercreds.Password)
     $Interface=Get-NetAdapter|Where Name -Like "Ethernet*"|Select-Object -First 1
     $InterfaceAlias=$($Interface.Name)
-
+    $DomainDN= "DC=avddemo,DC=swo"
     Node localhost
     {
         LocalConfigurationManager 
@@ -93,13 +97,59 @@ configuration CreateADPDC
         xADDomain FirstDS 
         {
             DomainName = $DomainName
-            DomainAdministratorCredential = $DomainCreds
-            SafemodeAdministratorPassword = $DomainCreds
-            DatabasePath = "F:\NTDS"
-            LogPath = "F:\NTDS"
-            SysvolPath = "F:\SYSVOL"
-	        DependsOn = @("[xDisk]ADDataDisk", "[WindowsFeature]ADDSInstall")
-        } 
+            DomainAdministratorCredential   = $DomainCreds
+            SafemodeAdministratorPassword   = $DomainCreds
+            DatabasePath                    = "F:\NTDS"
+            LogPath                         = "F:\NTDS"
+            SysvolPath                      = "F:\SYSVOL"
+	        DependsOn                       = @("[xDisk]ADDataDisk", "[WindowsFeature]ADDSInstall")
+        }       
+         
+        xADOrganizationalUnit AVDHosts
+        {
+            Name                            = "AVD-Hosts"
+            Path                            = "$DomainDN"
+            ProtectedFromAccidentalDeletion = $true
+            Description                     = "OU for AVD-Hosts"
+            Ensure                          = 'Present'
+            DependsOn                       = "[[xADDomain]FirstDS"
+        }
+        xADOrganizationalUnit DemoPoCUsersOU
+        {
+            Name                            = "DemoPoC-Users"
+            Path                            = "$DomainDN"
+            ProtectedFromAccidentalDeletion = $true
+            Description                     = "OU for Demo-PoC-Users"
+            Ensure                          = 'Present'
+            DependsOn                       = "[[xADDomain]FirstDS"
+        }
+        xADUser DemoPoCUser 
+        { 
+            DomainName                      = $DomainName 
+            DomainAdministratorCredential   = $DomainCreds 
+            UserName                        = $UserCreds.Username
+            Description                     = "Demo PoC User account"
+            Path                            = "OU=DemoPoC-Users,$domainDN"
+            Password                        = $UserCreds
+            PasswordNotRequired             = $true
+            PasswordNeverExpires            = $true
+            ChangePasswordAtLogon           = $false
+            Enabled                         = $true
+            Ensure                          = "Present" 
+            DependsOn                       = "[xADOrganizationalUnit]DemoPoCUsersOU" 
+        }
+        xADGroup GG_AVDDemoUsers
+        {
+            GroupName                       = "GG_AVDDemoUsers"
+            DisplayName                     = "GG_AVDDemoUsers"
+            GroupScope                      = "Global"
+            Category                        = "Security"
+            Path                            = "OU=DemoPoC-Users,$domainDN"
+            Description                     = "Demousers for AVD PoC"
+            Ensure                          = "Present"
+            Members                         = $UserCreds.Username
+            DependsOn                       = "[xADOrganizationalUnit]DemoPoCUser" 
+        }  
 
    }
 } 
