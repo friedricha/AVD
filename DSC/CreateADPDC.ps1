@@ -112,7 +112,7 @@ configuration CreateADPDC
             ProtectedFromAccidentalDeletion = $true
             Description                     = "OU for AVD-Hosts"
             Ensure                          = 'Present'
-            DependsOn                       = "[[xADDomain]FirstDS"
+            DependsOn                       = "[xADDomain]FirstDS"
         }
         xADOrganizationalUnit DemoPoCUsersOU
         {
@@ -121,7 +121,7 @@ configuration CreateADPDC
             ProtectedFromAccidentalDeletion = $true
             Description                     = "OU for Demo-PoC-Users"
             Ensure                          = 'Present'
-            DependsOn                       = "[[xADDomain]FirstDS"
+            DependsOn                       = "[xADDomain]FirstDS"
         }
         xADUser DemoPoCUser 
         { 
