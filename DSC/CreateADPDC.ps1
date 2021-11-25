@@ -111,7 +111,7 @@ configuration CreateADPDC
             Path                            = "$DomainDN"
             ProtectedFromAccidentalDeletion = $true
             Description                     = "OU for AVD-Hosts"
-            Ensure                          = 'Present'
+            Ensure                          = "Present"
             DependsOn                       = "[xADDomain]FirstDS"
         }
         xADOrganizationalUnit DemoPoCUsersOU
@@ -120,7 +120,7 @@ configuration CreateADPDC
             Path                            = "$DomainDN"
             ProtectedFromAccidentalDeletion = $true
             Description                     = "OU for Demo-PoC-Users"
-            Ensure                          = 'Present'
+            Ensure                          = "Present"
             DependsOn                       = "[xADDomain]FirstDS"
         }
         xADUser DemoPoCUser 
@@ -147,7 +147,7 @@ configuration CreateADPDC
             Description                     = "Demousers for AVD PoC"
             Ensure                          = "Present"
             Members                         = $UserCreds.Username
-            DependsOn                       = "[xADOrganizationalUnit]DemoPoCUser" 
+            DependsOn                       = @("[xADUser]DemoPoCUser", "[xADOrganizationalUnit]DemoPoCUsersOU")
         }  
 
    }
