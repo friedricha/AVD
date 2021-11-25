@@ -128,11 +128,11 @@ configuration CreateADPDC
             DomainName                      = $DomainName 
             DomainAdministratorCredential   = $DomainCreds 
             UserName                        = $UserCreds.Username
+            UserPrincipalName               = $UserCreds.Username + "@" + $Domainname
             Description                     = "Demo PoC User account"
             Path                            = "OU=DemoPoC-Users,$domainDN"
             Password                        = $UserCreds
             PasswordNeverExpires            = $true
-            ChangePasswordAtLogon           = $false
             Enabled                         = $true
             Ensure                          = "Present" 
             DependsOn                       = "[xADOrganizationalUnit]DemoPoCUsersOU" 
