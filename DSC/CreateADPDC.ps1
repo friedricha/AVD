@@ -126,7 +126,9 @@ configuration CreateADPDC
         xADUser DemoPoCUser 
         { 
             DomainName                      = $DomainName
-            UserName                        = $UserCreds.Username
+            DomainAdministratorCredential   = $DomainCreds
+            UserName                        = "demo.user"
+            UserPrincipalName               = "demo.user@avddemo.swo"
             Description                     = "Demo PoC User account"
             Path                            = "OU=DemoPoC-Users,$domainDN"
             Password                        = $UserCreds
