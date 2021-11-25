@@ -146,7 +146,7 @@ configuration CreateADPDC
             Path                            = "OU=DemoPoC-Users,$domainDN"
             Description                     = "Demousers for AVD PoC"
             Ensure                          = "Present"
-            Members                         = $UserCreds.Username
+            Members                         = "demo.user"
             DependsOn                       = @("[xADOrganizationalUnit]DemoPoCUsersOU", "[xADUser]DemoPoCUser")
         }  
 
