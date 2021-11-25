@@ -131,7 +131,6 @@ configuration CreateADPDC
             Description                     = "Demo PoC User account"
             Path                            = "OU=DemoPoC-Users,$domainDN"
             Password                        = $UserCreds
-            PasswordNotRequired             = $true
             PasswordNeverExpires            = $true
             ChangePasswordAtLogon           = $false
             Enabled                         = $true
