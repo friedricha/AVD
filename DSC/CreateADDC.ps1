@@ -8,16 +8,12 @@ configuration CreateADDC
         [Parameter(Mandatory)]
         [System.Management.Automation.PSCredential]$Admincreds,
 
-        [Parameter(Mandatory)]
-        [System.Management.Automation.PSCredential]$Usercreds,
-
         [Int]$RetryCount=20,
         [Int]$RetryIntervalSec=30
     ) 
     
     Import-DscResource -ModuleName xActiveDirectory, xStorage, xNetworking, PSDesiredStateConfiguration, xPendingReboot
     [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
-    [System.Management.Automation.PSCredential ]$UserCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Usercreds.UserName)", $Usercreds.Password)
     $Interface=Get-NetAdapter|Where Name -Like "Ethernet*"|Select-Object -First 1
     $InterfaceAlias=$($Interface.Name)
     $DomainDN= "DC=avddemo,DC=swo"
