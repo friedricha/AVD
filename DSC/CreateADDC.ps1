@@ -12,7 +12,7 @@ configuration CreateADDC
         [Int]$RetryIntervalSec=30
     ) 
     
-    Import-DscResource -ModuleName xActiveDirectory, xStorage, xNetworking, PSDesiredStateConfiguration, xPendingReboot
+    Import-DscResource -ModuleName xActiveDirectory, xStorage, xNetworking, PSDesiredStateConfiguration, xPendingReboot, DnsServerDsc
     [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
     $Interface=Get-NetAdapter|Where Name -Like "Ethernet*"|Select-Object -First 1
     $InterfaceAlias=$($Interface.Name)
@@ -53,40 +53,48 @@ configuration CreateADDC
             Address        = '127.0.0.1' 
             InterfaceAlias = $InterfaceAlias
             AddressFamily  = 'IPv4'
-	        DependsOn = "[WindowsFeature]DNS"
+	        DependsOn      = "[WindowsFeature]DNS"
         }
 
         xWaitforDisk Disk2
         {
-            DiskNumber = 2
+            DiskNumber       = 2
             RetryIntervalSec =$RetryIntervalSec
-            RetryCount = $RetryCount
+            RetryCount       = $RetryCount
         }
 
         xDisk ADDataDisk {
-            DiskNumber = 2
+            DiskNumber  = 2
             DriveLetter = "F"
-            DependsOn = "[xWaitForDisk]Disk2"
+            DependsOn   = "[xWaitForDisk]Disk2"
         }
 
         WindowsFeature ADDSInstall 
         { 
-            Ensure = "Present" 
-            Name = "AD-Domain-Services"
-	        DependsOn="[WindowsFeature]DNS" 
-        } 
+            Ensure    = "Present" 
+            Name      = "AD-Domain-Services"
+	        DependsOn ="[WindowsFeature]DNS" 
+        }
+
+        DnsServerForwarder SetForwarders
+        {
+            IsSingleInstance = 'Yes'
+            IPAddresses      = @('168.63.129.16')
+            UseRootHint      = $false
+            DependsOn        = "[WindowsFeature]DNS"
+        }
 
         WindowsFeature ADDSTools
         {
-            Ensure = "Present"
-            Name = "RSAT-ADDS-Tools"
+            Ensure    = "Present"
+            Name      = "RSAT-ADDS-Tools"
             DependsOn = "[WindowsFeature]ADDSInstall"
         }
 
         WindowsFeature ADAdminCenter
         {
-            Ensure = "Present"
-            Name = "RSAT-AD-AdminCenter"
+            Ensure    = "Present"
+            Name      = "RSAT-AD-AdminCenter"
             DependsOn = "[WindowsFeature]ADDSInstall"
         }
          
